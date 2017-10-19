@@ -41,5 +41,29 @@ module.exports = {
 		});
 
 		return false;
+	},
+	edit:function(req, res){
+		Articles.findOne({id: req.params.id}).exec(function(err, article){
+			if(err){
+			res.send(500, {error: 'Database Error'});
+		  }
+
+			res.view('edit', {article:article});
+		});
+	},
+	update:function(req, res){
+		var param = req.params.all();
+		var xx = param.title;
+		var vv = param.body;
+
+		Articles.update({id: param.id}, {title: xx, body: vv}).exec(function(err){
+			if(err){
+				res.send(500, {error: 'Database Error'});
+			}
+
+			res.redirect('/articles/list');
+		});
+
+		return false;
 	}
 };
